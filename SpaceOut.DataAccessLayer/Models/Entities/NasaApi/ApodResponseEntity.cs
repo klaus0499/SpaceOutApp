@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SpaceOut.Shared.Models.Responses;
 
-namespace SpaceOut.Models.NasaApi.APOD;
+namespace SpaceOut.DataAccessLayer.Models.Entities.NasaApi;
 
 // Brute force test of https://api.nasa.gov/ 
 // Specifically: GET https://api.nasa.gov/planetary/apod 
@@ -16,14 +16,14 @@ namespace SpaceOut.Models.NasaApi.APOD;
 //    api_key       string DEMO_KEY     api.nasa.gov key for expanded usage
 //    https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY
 
-public class ApodResponse
+public class ApodResponseEntity : OperationResultResponse
 {
-    public string? Copyright { get; set; }  
-    public DateTime? Date { get; set; }
-    public string? Explanation { get; set; }
-    public string? HdUrl { get; set; }
-    public string? Media_Type { get; set; }
-    public string? Service_Version { get; set; }
-    public string? Title { get; set; }
-    public string? Url { get; set; }
+    public string Copyright { get; set; } = string.Empty;
+    public DateTime Date { get; set; }
+    public string Explanation { get; set; } = string.Empty;
+    public string HdUrl { get; set; } = string.Empty;
+    public string Media_Type { get; set; } = string.Empty;
+    public string Service_Version { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
+    public string Url { get; set; } = string.Empty;
 }

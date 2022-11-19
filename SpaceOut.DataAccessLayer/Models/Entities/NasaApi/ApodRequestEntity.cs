@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SpaceOut.Models.NasaApi.APOD;
+﻿namespace SpaceOut.DataAccessLayer.Models.Entities.NasaApi;
 
 // Brute force test of https://api.nasa.gov/ 
 // Specifically: GET https://api.nasa.gov/planetary/apod 
@@ -16,12 +14,10 @@ namespace SpaceOut.Models.NasaApi.APOD;
 //    api_key       string DEMO_KEY     api.nasa.gov key for expanded usage
 //    https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY
 
-public class ApodRequest
+public class ApodRequestEntity
 {
-    [Required]
-    public DateTime StartDate { get; set; }  
-    public DateTime? EndDate { get; set; } = null;
-    public int? Count { get; set; } = null;
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+    public int Count { get; set; } = 0;
     public bool Thumbs { get; set; } = false;
-    public string? ApiKey { get; set; } = null;
 }

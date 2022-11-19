@@ -1,103 +1,71 @@
 ﻿@page "/gatewaytospace"
 
-@using Models.NasaApi.APOD
-@using System.Net.Http
-@using System.Net.Http.Json
+@using SpaceOut.BusinessLogicLayer.Models.DTOs.NasaApi;
+@using SpaceOut.BusinessLogicLayer.Services;
 
-@inject HttpClient Http
+@inject NasaService nasaService
 
 <PageTitle>Gateway To Space</PageTitle>
 
 <h1>Welcome To Your Gateway To Space</h1>
 
-<!-- Brute force test of https://api.nasa.gov/ -->
-<!-- Specifically: GET https://api.nasa.gov/planetary/apod -->
-<!-- Query Parameters
-    Parameter	Type	            Default	Description
-    date	    YYYY-MM-DD	today	The date of the APOD image to retrieve
-    start_date	YYYY-MM-DD	none	The start of a date range, when requesting date for a range of dates. 
-                                    Cannot be used with date.
-    end_date	YYYY-MM-DD	today	The end of the date range, when used with start_date.
-    count	    int	none	        If this is specified then count randomly chosen images will be returned. 
-                                    Cannot be used with date or start_date and end_date.
-    thumbs	    bool	False	    Return the URL of video thumbnail. If an APOD is not a video, this parameter is ignored.
-    api_key	    string	DEMO_KEY	api.nasa.gov key for expanded usage
-    https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY
--->
-
-<EditForm Model="@apodRequest" OnValidSubmit="@HandleValidSubmit">
+<EditForm Model="@apodRequestDto" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <p>
         <label>
             Start Date:
-            <InputDate @bind-Value="apodRequest.StartDate" />
+            <InputDate @bind-Value="apodRequestDto.StartDate" />
         </label>
     </p>
 
     <p>
         <label>
             End Date:
-            <InputDate @bind-Value="apodRequest.EndDate" />
+            <InputDate @bind-Value="apodRequestDto.EndDate" />
         </label>
     </p>
 
     <p>
         <label>
             Count:
-            <InputNumber @bind-Value="apodRequest.Count" />
+            <InputNumber @bind-Value="apodRequestDto.Count" />
         </label>
     </p>
 
     <p>
         <label>
             Thumbs:
-            <InputCheckbox @bind-Value="apodRequest.Thumbs" />
+            <InputCheckbox @bind-Value="apodRequestDto.Thumbs" />
         </label>
     </p>
 
     <button type="submit">Submit</button> 
 </EditForm>
 
-@if (apodResponse is not null)
+@if (apodResponseDto is not null)
 {
-    <p>Copyright: @apodResponse.Copyright</p>
-    <p>Date: @apodResponse.Date?.Date.ToShortDateString()</p>
-    <p>Explanation: @apodResponse.Explanation</p>
-    <p>HD Url: @apodResponse.HdUrl</p>
-    <p>Media Type: @apodResponse.Media_Type</p>
-    <p>Service Version: @apodResponse.Service_Version</p>
-    <p>Title: @apodResponse.Title</p>
-    <p>Image: <img src="@apodResponse.Url" /></p>
+    <p>Copyright: @apodResponseDto.Copyright</p>
+    <p>Date: @apodResponseDto.Date.Date.ToShortDateString()</p>
+    <p>Explanation: @apodResponseDto.Explanation</p>
+    <p>HD Url: @apodResponseDto.HdUrl</p>
+    <p>Url: @apodResponseDto.Url</p>
+    <p>Media Type: @apodResponseDto.Media_Type</p>
+    <p>Service Version: @apodResponseDto.Service_Version</p>
+    <p>Title: @apodResponseDto.Title</p>
+    <p>Image: <img src="@apodResponseDto.Url" /></p>
 }
 
 @code {
-    private ApodRequest apodRequest = new ApodRequest() { StartDate = DateTime.Now };
-    private ApodResponse? apodResponse = null; 
+    private ApodRequestDto apodRequestDto = new ApodRequestDto() { StartDate = DateTime.Now };
+    private ApodResponseDto? apodResponseDto = null;
 
     private async Task HandleValidSubmit()
     {
         // Do further validation
 
         // If all is well. Process the valid form
-        Console.WriteLine(apodRequest.StartDate.ToShortTimeString());
-        Console.WriteLine(apodRequest.EndDate.ToString());
-        Console.WriteLine(apodRequest.Count);
-        Console.WriteLine(apodRequest.Thumbs);
-        apodResponse = await NasaApiApodRequest(apodRequest);
-
-    }
-
-    private async Task<ApodResponse?> NasaApiApodRequest(ApodRequest request)
-    {
-        Http.BaseAddress = new Uri("https://api.nasa.gov/planetary/");
-        string requestString = "apod?api_key=DEMO_KEY";
-        requestString = requestString + "&date=" + 
-                        request.StartDate.Date.Year.ToString() + "-" + 
-                        request.StartDate.Date.Month.ToString() + "-" +
-                        request.StartDate.Date.Day.ToString();
-        apodResponse = await Http.GetFromJsonAsync<ApodResponse>(requestString);
-        return apodResponse;
+        apodResponseDto = await nasaService.GetApod(apodRequestDto);
     }
 }
