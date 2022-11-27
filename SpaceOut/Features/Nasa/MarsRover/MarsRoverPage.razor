@@ -1,0 +1,151 @@
+﻿@page "/nasa/marsrover"
+
+@using SpaceOut.BusinessLogicLayer.Models.DTOs.NasaApi;
+@using SpaceOut.BusinessLogicLayer.Services;
+@using SpaceOut.UI.Models.Nasa.MarsRover;
+
+@inject NasaService nasaService
+
+<PageTitle>Mars Rover Photos</PageTitle>
+
+<section class="nasa-marsrover-section section-marsrover">
+    <div class="nasa-marsrover-container flow">
+        <header class="nasa-marsrover-section__header">
+            <h2 class="nasa-marsrover-section__header__title">
+                NASA
+            </h2>
+            <p class="nasa-marsrover-section__header__subtitle">
+                Mars Rover Photos
+            </p>
+        </header>
+        <p class="nasa-marsrover-section__paragraph">
+            Please choose mars rover robot. Then click a camera for a specific day.  
+        </p>
+        <p class="nasa-marsrover-section__paragraph">
+            <button @onclick="() => GetRoverManifestData(Curiosity)">Curiosity</button>
+            <button @onclick="() => GetRoverManifestData(Spirit)">Spirit</button>
+            <button @onclick="() => GetRoverManifestData(Opportunity)">Opportunity</button>
+        </p>
+        @if (marsRoverManifestResponseDto is not null && @marsRoverManifestResponseDto.Photo_Manifest is not null)
+        {
+            // Display Rover Data
+            <div class="nasa-marsrover-card-container">
+                <div class="nasa-marsrover-card-rover">
+                    <img src="images/nasa/marsrover/@(marsRoverManifestResponseDto.Photo_Manifest.Name + ".png")" alt="Rover" class="nasa-marsrover-card-image" />
+                    <div class="nasa-marsrover-card-content">
+                        <h2 class="nasa-marsrover-card-title">Mission: @marsRoverManifestResponseDto.Photo_Manifest.Status</h2>
+                        <p class="nasa-marsrover-card-body">
+                            Launch date: @marsRoverManifestResponseDto.Photo_Manifest.Launch_Date
+                        </p>
+                        <p class="nasa-marsrover-card-body">
+                            Landing date: @marsRoverManifestResponseDto.Photo_Manifest.Landing_Date
+                        </p>
+                    </div>
+                </div>          
+            </div>
+            <p class="nasa-marsrover-section__paragraph">
+                Click on a camera for specific day to view the pictures for that camera from that day.
+            </p>
+            // Display Available Rover Dates
+            <div class="nasa-marsrover-table-container">
+                <table class="table table-sm table-dark table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Earth Date</th>
+                            <th scope="col">Total Photos</th>
+                            <th scope="col">Cameras Available</th>
+                        </tr>
+                    </thead>
+                    <tbody class="nasa-marsrover-available-dates-table-body">
+                        <!-- {" photo_manifest":
+                        //      {   "name":"Opportunity",
+                        //          "landing_date":"2004-01-25",
+                        //          "launch_date":"2003-07-07",
+                        //          "status":"complete",
+                        //          "max_sol":5111,
+                        //          "max_date":"2018-06-11",
+                        //          "total_photos":198439,
+                        //          "photos":[  {   "sol":1,
+                        //                          "earth_date":"2004-01-26",
+                        //                          "total_photos":95,
+                        //                          "cameras":["ENTRY","FHAZ","NAVCAM","PANCAM","RHAZ"]},
+                        //                      {   "sol":2,
+                        //                          "earth_date":"2004-01-27",
+                        //                          "total_photos":280,
+                        //                          "cameras":["MINITES","NAVCAM","PANCAM"]},
+                        //                      {   "sol":3,
+                        //                          "earth_date":"2004-01-28",
+                        //                          "total_photos":321,
+                        //                          "cameras":["NAVCAM","PANCAM","RHAZ"]},-->
+                        <Virtualize Items="@marsRoverManifestResponseDto.Photo_Manifest.Photos" Context="photo">
+                            <tr>
+                                <td>@photo.Earth_Date</td>
+                                <td>@photo.Total_Photos</td>
+                                <td>
+                                    @if (photo.Cameras is not null)
+                                    {
+                                        @foreach (var camera in photo.Cameras)
+                                        {
+                                            <button @onclick="() => GetRoverDateCameraPhotoList(photo.Earth_Date, camera)">@(camera) </button>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        </Virtualize>                        
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</section>
+
+<section class="nasa-marsrover-section section-marsrover2">
+    <div class="nasa-marsrover-container flow">
+        <header class="nasa-marsrover-section__header">
+            <h2 class="nasa-marsrover-section__header__title">
+                NASA
+            </h2>
+            <p class="nasa-marsrover-section__header__subtitle">
+                Mars Rover Photo Navigation
+            </p>
+        </header>
+        @if (marsRoverDateCameraPhotoListResponseDto is not null)
+        {
+            <Virtualize Items="@marsRoverDateCameraPhotoListResponseDto.Photos" Context="photo">
+                <p class="nasa-marsrover-section__paragraph">Id: @photo.Id</p>
+                <p class="nasa-marsrover-section__paragraph">Rover: @photo.Rover.Name</p>
+                <p class="nasa-marsrover-section__paragraph">Camera: @photo.Camera.Full_Name</p>
+                <p class="nasa-marsrover-section__paragraph">@photo.Earth_Date</p>
+                <img src="@photo.Img_Src" />
+            </Virtualize>
+        }
+    </div>
+</section>
+
+@code {
+    private static string Curiosity = "Curiosity";
+    private static string Spirit = "Spirit";
+    private static string Opportunity = "Opportunity";
+    private string selectedRover = "";
+
+    private MarsRoverManifestRequestDto marsRoverManifestRequestDto = new();
+    private MarsRoverManifestResponseDto? marsRoverManifestResponseDto = null;
+
+    private MarsRoverDateCameraPhotoListRequestDto marsRoverDateCameraPhotoListRequestDto = new(); 
+    private MarsRoverDateCameraPhotoListResponseDto? marsRoverDateCameraPhotoListResponseDto = null;
+
+    private async Task GetRoverManifestData(string rover)
+    {
+        selectedRover = rover;
+        marsRoverManifestRequestDto.Name = rover;
+        marsRoverManifestResponseDto = await nasaService.GetMarsRoverManifest(marsRoverManifestRequestDto);
+    }
+
+    private async Task GetRoverDateCameraPhotoList(string earthDate, string cameraName)
+    {
+        marsRoverDateCameraPhotoListRequestDto.RoverName = selectedRover;
+        marsRoverDateCameraPhotoListRequestDto.EarthDate = earthDate;
+        marsRoverDateCameraPhotoListRequestDto.CameraName = cameraName;
+        marsRoverDateCameraPhotoListResponseDto = await nasaService.GetMarsRoverDateCameraPhotoList(marsRoverDateCameraPhotoListRequestDto);
+    }
+}

@@ -1,0 +1,83 @@
+/*************************************************************************************************/
+/* Header CSS                                                                                    */
+/*************************************************************************************************/
+
+.header { /* black on white */
+    background-color: var(--clr-white);
+    color: var(--clr-black);
+}
+
+.header-nav {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.header-nav__list {
+    list-style: none; /* we want no bullets on our list */
+    display: flex; /* instead of non block style we choose flex to lay them out on one row */
+    flex-wrap: wrap; /* make sure menu line wraps at small screen sizes*/
+    justify-content: center; /* keep menu line centered */
+    text-transform: uppercase; /* make sure menu items are allways uppercase */
+    font-weight: var(--fw-bold); /* chose our bold font */
+    padding: 0; /* no padding anywhere */
+}
+
+    .header-nav__list li + li { /* only make left margin between menu items if there is a menu item more to the right */
+        margin-left: 1rem;
+    }
+
+.header-nav__link {
+    color: var(--clr-primary);
+}
+
+    .header-nav__link:hover {
+        color: var(--clr-black);
+    }
+
+/*************************************************************************************************/
+/* Main Page Contents CSS                                                                        */
+/*************************************************************************************************/
+
+.main { /* white on black - but see actual page contents css for any possible overrides */
+    background-color: var(--clr-black);
+    color: var(--clr-white);
+}
+
+/*************************************************************************************************/
+/* Footer CSS                                                                                    */
+/*************************************************************************************************/
+
+.footer { /* white on black */
+    background-color: var(--clr-black);
+    color: var(--clr-white);
+    text-align: center;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.footer__p {
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: var(--fw-bold);
+}
+
+.footer__social__list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-weight: var(--fw-bold);
+    padding: 0;
+}
+
+    .footer__social__list li + li {
+        margin-left: 1rem;
+    }
+
+.footer__social__link {
+    color: var(--clr-primary);
+}

@@ -1,0 +1,92 @@
+﻿.nasa-marsrover-section {
+    padding: var(--section-spacing) 0;
+}
+
+.nasa-marsrover-container {
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    max-width: 62.5rem;
+}
+
+.nasa-marsrover-section__header {
+    display: block;
+    width: fit-content;
+}
+
+.nasa-marsrover-section__header__title {
+    font-weight: var(--fw-bolder);
+    font-size: var(--fs-large);
+    line-height: .9;
+}
+
+.nasa-marsrover-section__header__subtitle {
+    font-weight: var(--fw-normal);
+    font-size: var(--fs-small);
+    text-align: right;
+}
+
+.nasa-marsrover-section__paragraph {
+    font-weight: var(--fw-normal);
+    font-size: var(--fs-normal);
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+}
+
+.nasa-marsrover-card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 400px);
+    background-color: var(--clr-black);
+    font-family: var(--ff-normal);
+}
+
+.nasa-marsrover-card-rover {
+    color: var(--clr-white);
+    border: solid 3px;
+    background-size: cover;
+    max-width: 35ch;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 500ms ease;
+}
+
+.nasa-marsrover-card-content {
+    background: linear-gradient( hsl(0 0% 0% / 0), hsl(20 0% 0% / 0.3) 20%, hsl(0 0% 0% / 1) );
+}
+
+.nasa-marsrover-table-container {
+    overflow: scroll; 
+    height: 25rem;
+}
+
+.nasa-marsrover-api-nav__link {
+    color: var(--clr-white);
+}
+
+.nasa-marsrover-logos-nav__link {
+    color: var(--clr-black);
+}
+
+.nasa-marsrover-section__button {
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 100vw;
+    line-height: 1;
+    box-shadow: 0 0.125em 0.5em rgb(0 0 0 / 15%);
+    background-color: var(--clr-home);
+    color: var(--clr-white);
+    padding-top: 0.95em;
+    padding-right: 1.75em;
+    padding-bottom: 0.85em;
+    padding-left: 1.75em;
+    position: absolute;
+}
+
+.section-marsrover { /* white on black */
+    background-color: var(--clr-black);
+    color: var(--clr-white);
+}
+
+.section-marsrover2 { /* black on white */
+    background-color: var(--clr-white);
+    color: var(--clr-black);
+}

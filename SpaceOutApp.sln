@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceOut.BusinessLogicLayer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceOut.DataAccessLayer", "SpaceOut.DataAccessLayer\SpaceOut.DataAccessLayer.csproj", "{2C17626F-4D42-482E-8ACB-FF3454EE71B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceOut.Shared", "SpaceOut.Shared\SpaceOut.Shared.csproj", "{012E3A79-FDCE-496C-953D-F97C4A6BD9AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpaceOut.Shared", "SpaceOut.Shared\SpaceOut.Shared.csproj", "{012E3A79-FDCE-496C-953D-F97C4A6BD9AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

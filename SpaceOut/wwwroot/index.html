@@ -2,12 +2,51 @@
 <html lang="en">
 
 <head>
+    <!-- Part of HTML Skeleton from https://www.joshwcomeau.com/snippets/html/html-skeleton/ -->
+    <!-- No <title>Langgaard Thomsen</title> as we use <PageTitle> tag on each Blazor Page -->
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>SpaceOut</title>
+
+    <meta name="author" content="Klaus Langgaard Thomsen" />
+    <meta name="description" content="A site about Space using Free APIs by NASA and ESA" />
+
+    <!-- Open Graph tags for facebook etc. See https://ahrefs.com/blog/open-graph-meta-tags/ -->
+    <meta property="og:title" content="Spaceout by Klaus Langgaard Thomsen" />
+    <meta property="og:description" content="My site about Space" />
+    <meta property="og:image" content="/images/expertise - logo CSharp.png" />
+    <meta property="og:url" content="/" />
+    <meta property="og:site_name" content="spaceout.langgaard-thomsen.dk" />
+
+    <!-- `twitter` is similar to Open Graph, but specific to Twitter.
+         There are multiple card types you can choose from. Learn more on Twitter's documentation:
+         https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started
+    -->
+    <meta name="twitter:card" content="/images/expertise - logo CSharp.png" />
+    <meta name="twitter:image:alt" content="C# image" />
+
+    <!-- The <base> tag specifies the base URL and/or target for all relative URLs in a document. -->
     <base href="/" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Roboto:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+
+    <!-- A favicon can now be a single vector graphic in SVG format that will scale to any size and still look crisp
+        The favicon.svg in wwwroot/favicon.svg was created with https://formito.com/tools/favicon
+    -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <!-- Bootstrap frontend UI -->
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Link to Blazor top level CSS stylesheet -->
     <link href="css/app.css" rel="stylesheet" />
+
+    <!-- CSS isolation bundling occurs at build time - https://docs.microsoft.com/en-us/aspnet/core/blazor/components/css-isolation?view=aspnetcore-6.0
+         Location in project is typically here when developing: C:\Users\KlausLanggaardThomse\source\repos\LanggaardThomsen2022App\LanggaardThomsen2022\obj\Debug\net6.0\scopedcss\bundle
+    -->
     <link href="SpaceOut.UI.styles.css" rel="stylesheet" />
 </head>
 

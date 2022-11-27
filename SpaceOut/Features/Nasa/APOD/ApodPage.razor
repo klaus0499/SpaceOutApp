@@ -1,0 +1,138 @@
+﻿@page "/nasa/apod"
+
+@using SpaceOut.BusinessLogicLayer.Models.DTOs.NasaApi;
+@using SpaceOut.BusinessLogicLayer.Services;
+@using SpaceOut.UI.Models.Nasa.APOD;
+
+@inject NasaService nasaService
+
+<PageTitle>NASA Astronomy Picture Of the Day (APOD)</PageTitle>
+
+<section class="nasa-apod-section section-apod">
+    <div class="nasa-apod-container flow">
+        <header class="nasa-apod-section__header">
+            <h2 class="nasa-apod-section__header__title">
+                NASA
+            </h2>
+            <p class="nasa-apod-section__header__subtitle">
+                Astronomy Picture Of the Day
+            </p>
+        </header>
+        <p class="nasa-apod-section__paragraph">
+            Please choose if you want one astronomy picture from a specific day or 1 to 10 pictures of 
+            random astronomy pictures. 
+        </p>
+        <p class="nasa-apod-section__paragraph">
+            <EditForm EditContext="dateContext" OnValidSubmit="@GetApodPicture">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="apod-date-form-group">
+                    <label class="apod-date-label">Date:</label>
+                    <InputDate class="apod-date-input" @bind-Value="dateModel.Date" />
+                    <button class="apod-date-button" type="submit">Get</button>
+                </div>
+            </EditForm>
+        </p>
+        <p class="nasa-apod-section__paragraph">
+            <EditForm EditContext="countContext" OnValidSubmit="@GetApodPictureList">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="apod-number-form-group">
+                    <label class="apod-date-label">Number:</label>
+                    <InputNumber class="apod-number-input" @bind-Value="countModel.Count" />
+                    <button class="apod-number-button" type="submit">Get</button>
+                </div>
+            </EditForm>
+        </p>
+    </div>
+</section>
+
+<section class="nasa-apod-section section-apod2">
+    <div class="nasa-apod-container flow">
+        <header class="nasa-apod-section__header">
+            <h2 class="nasa-apod-section__header__title">
+                NASA
+            </h2>
+            <p class="nasa-apod-section__header__subtitle">
+                Astronomy Picture Of the Day
+            </p>
+        </header>
+        @if (apodResponseDtoList is not null)
+        {
+            <!--
+                <p>Copyright: @apodResponseDto.Copyright</p>
+                <p>Url: @apodResponseDto.Url</p>
+                <p>HD Url: @apodResponseDto.HdUrl</p>
+                <p>Media Type: @apodResponseDto.Media_Type</p>
+                <p>Service Version: @apodResponseDto.Service_Version</p>
+            -->
+            @for (int i=0; i<apodResponseDtoList.Count; i++) {
+                if (apodResponseDtoList[i].Success) {
+                    <p class="nasa-apod-section__paragraph">Date: @apodResponseDtoList[i].Date.Date.ToShortDateString()</p>
+                    <p class="nasa-apod-section__paragraph">Title: @apodResponseDtoList[i].Title</p>
+                    <img src="@apodResponseDtoList[i].Url" />
+                    <p class="nasa-apod-section__paragraph">@apodResponseDtoList[i].Explanation</p>
+                }
+                else
+                {
+                    <p class="nasa-apod-section__paragraph">Error retrieving APOD[@i]. Error message returned = @apodResponseDtoList[i].ErrorMessage</p>
+                }
+            }
+        }
+    </div>
+</section>
+
+@code {
+    private List<ApodResponseDto>? apodResponseDtoList = null;
+    private ApodRequestDto apodRequestDto = new ApodRequestDto();
+    private ApodResponseDto apodResponseDto = new ApodResponseDto();
+    private EditContext? dateContext;
+    private ValidationMessageStore? dateContextValidationMessageStore;
+    private EditContext? countContext;
+    private DateModel dateModel = new();
+    private CountModel countModel = new() { Count = 1 };
+    private DateTime apodBeginDate = new DateTime(1995, 6, 20);
+
+    protected override async Task OnInitializedAsync()
+    {
+        dateContext = new EditContext(dateModel);
+        dateContext.OnValidationRequested += HandleDateValidationRequested;
+        dateContextValidationMessageStore = new(dateContext);
+        countContext = new EditContext(countModel);
+        dateModel.Date = DateTime.Now;
+        await GetApodPicture();
+    }
+
+    // https://learn.microsoft.com/en-us/aspnet/core/blazor/forms-and-input-components?view=aspnetcore-7.0
+    private void HandleDateValidationRequested(object? sender, ValidationRequestedEventArgs args)
+    {
+        // Custom date validation logic
+        // Clear any previous date validation messages
+        dateContextValidationMessageStore?.Clear();
+
+        // APODs are valid from 20-06-1995 and until present day
+        if (dateModel.Date > DateTime.Now)
+        {
+            dateContextValidationMessageStore?.Add(() => dateModel.Date, "APOD date can not be in the future");
+        }
+        if (dateModel.Date < apodBeginDate)
+        {
+            dateContextValidationMessageStore?.Add(() => dateModel.Date, "No APODs available before 20-06-1995");
+        }
+    }
+
+    private async Task GetApodPicture()
+    {        
+        // Model date is correct we can set it in our request
+        apodRequestDto.StartDate = dateModel.Date;
+        apodResponseDto = await nasaService.GetApod(apodRequestDto);
+        apodResponseDtoList = new List<ApodResponseDto>();
+        apodResponseDtoList.Add(apodResponseDto);
+    }
+
+    private async Task GetApodPictureList()
+    {
+        apodRequestDto.Count = countModel.Count;
+        apodResponseDtoList = await nasaService.GetApodCount(apodRequestDto);
+    }
+}
