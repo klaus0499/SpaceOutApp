@@ -1,5 +1,4 @@
-﻿using SpaceOut.DataAccessLayer.Models.Entities.NasaApi;
-using SpaceOut.Shared.Models.Responses;
+﻿using SpaceOut.Shared.Models.Responses;
 
 namespace SpaceOut.BusinessLogicLayer.Models.DTOs.NasaApi;
 
