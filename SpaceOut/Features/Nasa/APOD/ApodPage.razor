@@ -66,18 +66,18 @@
                 <p>Media Type: @apodResponseDto.Media_Type</p>
                 <p>Service Version: @apodResponseDto.Service_Version</p>
             -->
-            @for (int i=0; i<apodResponseDtoList.Count; i++) {
-                if (apodResponseDtoList[i].Success) {
-                    <p class="nasa-apod-section__paragraph">Date: @apodResponseDtoList[i].Date.Date.ToShortDateString()</p>
-                    <p class="nasa-apod-section__paragraph">Title: @apodResponseDtoList[i].Title</p>
-                    <img src="@apodResponseDtoList[i].Url" />
-                    <p class="nasa-apod-section__paragraph">@apodResponseDtoList[i].Explanation</p>
+            <Virtualize Items="apodResponseDtoList" Context="apodResponseDto" SpacerElement="div">
+                @if (apodResponseDto.Success) {
+                    <p class="nasa-apod-section__paragraph">Date: @apodResponseDto.Date.ToShortDateString()</p>
+                    <p class="nasa-apod-section__paragraph">Title: @apodResponseDto.Title</p>
+                    <img src="@apodResponseDto.Url" />
+                    <p class="nasa-apod-section__paragraph">@apodResponseDto.Explanation</p>
                 }
                 else
                 {
-                    <p class="nasa-apod-section__paragraph">Error retrieving APOD[@i]. Error message returned = @apodResponseDtoList[i].ErrorMessage</p>
+                    <p class="nasa-apod-section__paragraph">Error retrieving APOD. Error message returned = @apodResponseDto.ErrorMessage</p>
                 }
-            }
+            </Virtualize>
         }
     </div>
 </section>

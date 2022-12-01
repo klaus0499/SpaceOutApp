@@ -10,7 +10,7 @@ public class MarsRoverDateCameraPhotoListResponseDto : OperationResultResponse
 public class MarsRoverDateCameraPhotoDto
 {
     public int Id { get; set; } = 0;
-    public int Sold { get; set; } = 0;
+    public int Sol { get; set; } = 0;
     public MarsRoverCameraDataDto Camera { get; set; } = new();
     public string Img_Src { get; set; } = string.Empty;
     public string Earth_Date { get; set; } = string.Empty;
